@@ -68,7 +68,15 @@ For each GitHub issue:
 1. **Implement the solution** with proper error handling and testing
 2. **Verify the implementation** against requirements
 3. **Commit changes** with meaningful commit messages including issue reference
-4. **Update documentation** as needed
+4. **Push changes** to remote repository
+5. **Close the GitHub issue** explicitly using `gh issue close #[issue-number]`
+6. **Update documentation** as needed
+
+**CRITICAL RULE**: Every completed issue MUST be:
+- Committed with proper commit message
+- Pushed to remote repository
+- Explicitly closed using GitHub CLI commands
+Never leave an issue open after implementation is complete.
 
 ### Commit Message Format
 ```
