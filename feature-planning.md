@@ -4,22 +4,22 @@
 **Goal**: Basic Spring Boot application with essential infrastructure
 
 ### 1.1 Project Setup
-- [ ] Maven project structure creation
-- [ ] Spring Boot 3.2.x dependencies configuration
-- [ ] Basic application.yml configuration files (dev, test, prod)
-- [ ] Main application class
+- [x] Maven project structure creation
+- [x] Spring Boot 3.2.x dependencies configuration
+- [x] Basic application.yml configuration files (dev, test, prod)
+- [x] Main application class
 
 ### 1.2 Domain Layer
-- [ ] Create all enums (AgeGroup, Gender, Interest, Occasion, Relationship, PersonalityType)
-- [ ] GiftSuggestion JPA entity
-- [ ] ConcreteGift JPA entity with relationships
-- [ ] Basic validation annotations
+- [x] Create all enums (AgeGroup, Gender, Interest, Occasion, Relationship, PersonalityType)
+- [x] GiftSuggestion JPA entity
+- [x] ConcreteGift JPA entity with relationships
+- [x] Basic validation annotations
 
 ### 1.3 Database Setup
-- [ ] PostgreSQL configuration
-- [ ] Database migration setup (Liquibase/Flyway)
+- [x] PostgreSQL configuration
+- [x] Database migration setup (Liquibase/Flyway)
 - [ ] Initial schema creation scripts
-- [ ] TestContainers configuration for tests
+- [x] TestContainers configuration for tests
 
 ## Phase 2: Data Access Layer
 **Goal**: Repository layer with basic CRUD operations
