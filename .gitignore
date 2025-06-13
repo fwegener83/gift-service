@@ -19,9 +19,7 @@ Thumbs.db
 logs/
 *.log
 
-# MCP configuration (contains secrets)
-.mcp.json
-
-# Environment files
+# Environment files and credentials
 .env
 .env.local
+**/application-local-credentials.yml
