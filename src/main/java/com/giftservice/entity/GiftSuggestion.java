@@ -1,6 +1,7 @@
 package com.giftservice.entity;
 
 import com.giftservice.enums.*;
+import com.giftservice.validation.ValidPriceRange;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "gift_suggestions")
 @EntityListeners(AuditingEntityListener.class)
+@ValidPriceRange
 public class GiftSuggestion {
 
     @Id
