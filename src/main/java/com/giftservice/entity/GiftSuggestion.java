@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -83,6 +85,9 @@ public class GiftSuggestion {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
+
+    @OneToMany(mappedBy = "giftSuggestion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ConcreteGift> concreteGifts = new ArrayList<>();
 
     /**
      * Default constructor for JPA
@@ -212,6 +217,25 @@ public class GiftSuggestion {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public List<ConcreteGift> getConcreteGifts() {
+        return concreteGifts;
+    }
+
+    public void setConcreteGifts(List<ConcreteGift> concreteGifts) {
+        this.concreteGifts = concreteGifts;
+    }
+
+    // Convenience methods for managing the bidirectional relationship
+    public void addConcreteGift(ConcreteGift concreteGift) {
+        concreteGifts.add(concreteGift);
+        concreteGift.setGiftSuggestion(this);
+    }
+
+    public void removeConcreteGift(ConcreteGift concreteGift) {
+        concreteGifts.remove(concreteGift);
+        concreteGift.setGiftSuggestion(null);
     }
 
     @Override
