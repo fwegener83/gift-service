@@ -43,7 +43,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param vendor the vendor name
      * @return list of concrete gifts from the specified vendor
      */
-    List<ConcreteGift> findByVendor(String vendor);
+    List<ConcreteGift> findByVendorName(String vendorName);
 
     /**
      * Find all concrete gifts by availability status.
@@ -60,7 +60,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param available the availability status
      * @return list of available concrete gifts from the specified vendor
      */
-    List<ConcreteGift> findByVendorAndAvailable(String vendor, Boolean available);
+    List<ConcreteGift> findByVendorNameAndAvailable(String vendorName, Boolean available);
 
     /**
      * Find all concrete gifts for a specific gift suggestion that are available.
@@ -107,7 +107,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param maxPrice the maximum price
      * @return list of concrete gifts within the price range
      */
-    @Query("SELECT cg FROM ConcreteGift cg WHERE cg.price >= :minPrice AND cg.price <= :maxPrice")
+    @Query("SELECT cg FROM ConcreteGift cg WHERE cg.exactPrice >= :minPrice AND cg.exactPrice <= :maxPrice")
     List<ConcreteGift> findByPriceRange(@Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice);
 
     /**
@@ -116,7 +116,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param maxPrice the maximum price limit
      * @return list of concrete gifts under the price limit
      */
-    List<ConcreteGift> findByPriceLessThanEqual(BigDecimal maxPrice);
+    List<ConcreteGift> findByExactPriceLessThanEqual(BigDecimal maxPrice);
 
     /**
      * Find concrete gifts above a specific price threshold.
@@ -124,7 +124,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param minPrice the minimum price threshold
      * @return list of concrete gifts above the price threshold
      */
-    List<ConcreteGift> findByPriceGreaterThanEqual(BigDecimal minPrice);
+    List<ConcreteGift> findByExactPriceGreaterThanEqual(BigDecimal minPrice);
 
     // Advanced queries with pagination
 
@@ -145,7 +145,7 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @param pageable pagination information
      * @return page of available concrete gifts from the vendor
      */
-    Page<ConcreteGift> findByVendorAndAvailable(String vendor, Boolean available, Pageable pageable);
+    Page<ConcreteGift> findByVendorNameAndAvailable(String vendorName, Boolean available, Pageable pageable);
 
     /**
      * Find concrete gifts by advanced criteria including price range and availability.
@@ -158,12 +158,12 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @return page of concrete gifts matching the criteria
      */
     @Query("SELECT cg FROM ConcreteGift cg WHERE " +
-           "(:vendor IS NULL OR cg.vendor = :vendor) AND " +
+           "(:vendorName IS NULL OR cg.vendorName = :vendorName) AND " +
            "(:available IS NULL OR cg.available = :available) AND " +
-           "(:minPrice IS NULL OR cg.price >= :minPrice) AND " +
-           "(:maxPrice IS NULL OR cg.price <= :maxPrice)")
+           "(:minPrice IS NULL OR cg.exactPrice >= :minPrice) AND " +
+           "(:maxPrice IS NULL OR cg.exactPrice <= :maxPrice)")
     Page<ConcreteGift> findByAdvancedCriteria(
-            @Param("vendor") String vendor,
+            @Param("vendorName") String vendorName,
             @Param("available") Boolean available,
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice,
@@ -183,8 +183,8 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
     @Query("SELECT cg FROM ConcreteGift cg WHERE " +
            "(:giftSuggestionId IS NULL OR cg.giftSuggestion.id = :giftSuggestionId) AND " +
            "(:available IS NULL OR cg.available = :available) AND " +
-           "(:minPrice IS NULL OR cg.price >= :minPrice) AND " +
-           "(:maxPrice IS NULL OR cg.price <= :maxPrice)")
+           "(:minPrice IS NULL OR cg.exactPrice >= :minPrice) AND " +
+           "(:maxPrice IS NULL OR cg.exactPrice <= :maxPrice)")
     Page<ConcreteGift> findBySuggestionAndCriteria(
             @Param("giftSuggestionId") UUID giftSuggestionId,
             @Param("available") Boolean available,
@@ -200,9 +200,9 @@ public interface ConcreteGiftRepository extends JpaRepository<ConcreteGift, UUID
      * @return count of concrete gifts matching the criteria
      */
     @Query("SELECT COUNT(cg) FROM ConcreteGift cg WHERE " +
-           "(:vendor IS NULL OR cg.vendor = :vendor) AND " +
+           "(:vendorName IS NULL OR cg.vendorName = :vendorName) AND " +
            "(:available IS NULL OR cg.available = :available)")
     long countByVendorAndAvailable(
-            @Param("vendor") String vendor,
+            @Param("vendorName") String vendorName,
             @Param("available") Boolean available);
 }
