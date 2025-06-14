@@ -2,9 +2,14 @@ package com.giftservice.repository;
 
 import com.giftservice.entity.GiftSuggestion;
 import com.giftservice.enums.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,4 +114,130 @@ public interface GiftSuggestionRepository extends JpaRepository<GiftSuggestion, 
      * @return list of gift suggestions matching all three criteria
      */
     List<GiftSuggestion> findByAgeGroupAndGenderAndInterest(AgeGroup ageGroup, Gender gender, Interest interest);
+
+    // Price range query methods
+
+    /**
+     * Find gift suggestions where the minimum price is less than or equal to the specified amount.
+     *
+     * @param maxBudget the maximum budget amount
+     * @return list of gift suggestions within the budget range
+     */
+    List<GiftSuggestion> findByMinPriceLessThanEqual(BigDecimal maxBudget);
+
+    /**
+     * Find gift suggestions where the maximum price is greater than or equal to the specified amount.
+     *
+     * @param minBudget the minimum budget amount
+     * @return list of gift suggestions above the minimum budget
+     */
+    List<GiftSuggestion> findByMaxPriceGreaterThanEqual(BigDecimal minBudget);
+
+    /**
+     * Find gift suggestions within a specific price range.
+     *
+     * @param minBudget the minimum budget
+     * @param maxBudget the maximum budget
+     * @return list of gift suggestions within the specified price range
+     */
+    @Query("SELECT gs FROM GiftSuggestion gs WHERE gs.minPrice <= :maxBudget AND gs.maxPrice >= :minBudget")
+    List<GiftSuggestion> findGiftsWithinBudget(@Param("minBudget") BigDecimal minBudget, @Param("maxBudget") BigDecimal maxBudget);
+
+    /**
+     * Find gift suggestions that can be afforded with the given budget.
+     *
+     * @param budget the available budget
+     * @return list of gift suggestions where the minimum price is within budget
+     */
+    @Query("SELECT gs FROM GiftSuggestion gs WHERE gs.minPrice <= :budget")
+    List<GiftSuggestion> findAffordableGifts(@Param("budget") BigDecimal budget);
+
+    // Advanced combination queries with pagination
+
+    /**
+     * Find gift suggestions by multiple criteria with pagination support.
+     *
+     * @param ageGroup the target age group
+     * @param gender the target gender
+     * @param interest the target interest
+     * @param occasion the target occasion
+     * @param pageable pagination information
+     * @return page of gift suggestions matching all criteria
+     */
+    Page<GiftSuggestion> findByAgeGroupAndGenderAndInterestAndOccasion(
+            AgeGroup ageGroup, Gender gender, Interest interest, Occasion occasion, Pageable pageable);
+
+    /**
+     * Advanced search for gift suggestions with multiple optional criteria and budget constraint.
+     *
+     * @param ageGroup the target age group (can be null)
+     * @param gender the target gender (can be null)
+     * @param interest the target interest (can be null)
+     * @param occasion the target occasion (can be null)
+     * @param relationship the target relationship (can be null)
+     * @param personalityType the target personality type (can be null)
+     * @param maxBudget the maximum budget (can be null for no budget limit)
+     * @param pageable pagination information
+     * @return page of gift suggestions matching the specified criteria
+     */
+    @Query("SELECT gs FROM GiftSuggestion gs WHERE " +
+           "(:ageGroup IS NULL OR gs.ageGroup = :ageGroup) AND " +
+           "(:gender IS NULL OR gs.gender = :gender) AND " +
+           "(:interest IS NULL OR gs.interest = :interest) AND " +
+           "(:occasion IS NULL OR gs.occasion = :occasion) AND " +
+           "(:relationship IS NULL OR gs.relationship = :relationship) AND " +
+           "(:personalityType IS NULL OR gs.personalityType = :personalityType) AND " +
+           "(:maxBudget IS NULL OR gs.minPrice <= :maxBudget)")
+    Page<GiftSuggestion> findByAdvancedCriteria(
+            @Param("ageGroup") AgeGroup ageGroup,
+            @Param("gender") Gender gender,
+            @Param("interest") Interest interest,
+            @Param("occasion") Occasion occasion,
+            @Param("relationship") Relationship relationship,
+            @Param("personalityType") PersonalityType personalityType,
+            @Param("maxBudget") BigDecimal maxBudget,
+            Pageable pageable);
+
+    /**
+     * Find gift suggestions by price range with pagination.
+     *
+     * @param minPrice the minimum price
+     * @param maxPrice the maximum price
+     * @param pageable pagination information
+     * @return page of gift suggestions within the price range
+     */
+    @Query("SELECT gs FROM GiftSuggestion gs WHERE gs.maxPrice >= :minPrice AND gs.minPrice <= :maxPrice")
+    Page<GiftSuggestion> findByPriceRangeWithPagination(
+            @Param("minPrice") BigDecimal minPrice,
+            @Param("maxPrice") BigDecimal maxPrice,
+            Pageable pageable);
+
+    /**
+     * Count gift suggestions by advanced criteria.
+     *
+     * @param ageGroup the target age group (can be null)
+     * @param gender the target gender (can be null)
+     * @param interest the target interest (can be null)
+     * @param occasion the target occasion (can be null)
+     * @param relationship the target relationship (can be null)
+     * @param personalityType the target personality type (can be null)
+     * @param maxBudget the maximum budget (can be null for no budget limit)
+     * @return count of gift suggestions matching the criteria
+     */
+    @Query("SELECT COUNT(gs) FROM GiftSuggestion gs WHERE " +
+           "(:ageGroup IS NULL OR gs.ageGroup = :ageGroup) AND " +
+           "(:gender IS NULL OR gs.gender = :gender) AND " +
+           "(:interest IS NULL OR gs.interest = :interest) AND " +
+           "(:occasion IS NULL OR gs.occasion = :occasion) AND " +
+           "(:relationship IS NULL OR gs.relationship = :relationship) AND " +
+           "(:personalityType IS NULL OR gs.personalityType = :personalityType) AND " +
+           "(:maxBudget IS NULL OR gs.minPrice <= :maxBudget)")
+    long countByAdvancedCriteria(
+            @Param("ageGroup") AgeGroup ageGroup,
+            @Param("gender") Gender gender,
+            @Param("interest") Interest interest,
+            @Param("occasion") Occasion occasion,
+            @Param("relationship") Relationship relationship,
+            @Param("personalityType") PersonalityType personalityType,
+            @Param("maxBudget") BigDecimal maxBudget);
 }
