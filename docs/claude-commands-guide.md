@@ -10,7 +10,7 @@
 
 ```bash
 # 1. Create a well-researched GitHub issue
-/project:create-issue "implement user authentication with JWT"
+/project:create-issue "user-authentication-jwt"
 
 # 2. Choose your implementation approach:
 /project:implement-issue 42                    # Traditional approach
@@ -56,21 +56,31 @@ graph LR
 
 ## 🔄 Detailed Workflows (10 minutes)
 
-### Command 1: `/project:create-issue "description"`
+### Command 1: `/project:create-issue "issue-name"`
 
 **Purpose**: Transform a feature idea into a comprehensive, implementable GitHub issue.
 
 #### Phase-by-Phase Breakdown
 
-**🔍 Phase 1: Research & Analysis**
+**📝 Phase 0: User Input Collection**
 ```bash
-/project:create-issue "implement advanced filtering for gift suggestions"
+/project:create-issue "advanced-gift-filtering"
 ```
 
 **What happens:**
-1. **Codebase Analysis**: Claude examines your project structure, patterns, and existing code
+1. **Issue Name Registration**: Takes the provided name as the issue identifier
+2. **User Input Request**: Prompts you to describe your ideas and requirements in detail
+3. **Requirement Gathering**: Asks you to explain what you want to implement, what problem it solves, and any specific ideas you have
+
+**📋 Output**: Clear understanding of your requirements and ideas
+
+**✋ User Checkpoint**: You provide detailed description of what you want to implement
+
+**🔍 Phase 1: Research & Analysis**
+**What happens:**
+1. **Codebase Analysis**: Claude examines your project structure, patterns, and existing code based on your input
 2. **Architecture Review**: Identifies integration points, affected components, and dependencies  
-3. **Requirements Clarification**: Asks intelligent questions to fill knowledge gaps
+3. **Requirements Analysis**: Structures your input into technical requirements
 4. **Risk Assessment**: Identifies potential challenges and mitigation strategies
 
 **📋 Output**: Comprehensive research document with findings and recommendations
@@ -97,7 +107,7 @@ graph LR
 **📋 Final Output**: 
 ```markdown
 **GitHub Issue Created**: #42
-**Title**: [FEATURE] Implement advanced filtering for gift suggestions  
+**Title**: [FEATURE] advanced-gift-filtering  
 **Status**: Ready for implementation
 **Next Steps**: Use /project:implement-issue 42 or /project:implement-issue-test-first 42
 ```
@@ -411,15 +421,16 @@ jobs:
 
 ### Troubleshooting Common Issues
 
-#### Issue: "Research findings insufficient"
-**Symptoms**: Create-issue command asks for more clarification than expected
+#### Issue: "User input insufficient"
+**Symptoms**: Create-issue command asks for more details in Phase 0
 **Causes**: 
-- Feature description too vague
-- Missing context about existing system
-- Ambiguous requirements
+- Issue name too vague or generic
+- Missing context about intended functionality
+- Unclear requirements or objectives
 
 **Solutions**:
-- Provide more specific feature descriptions
+- Provide detailed description of what you want to implement
+- Explain the problem you're trying to solve
 - Include examples of expected behavior
 - Reference existing similar features in the system
 
@@ -490,12 +501,12 @@ For larger features spanning multiple issues:
 
 ```bash
 # 1. Create parent tracking issue
-/project:create-issue "User Management System (Parent Issue)"
+/project:create-issue "user-management-system"
 
 # 2. Break down into smaller issues
-/project:create-issue "User registration with email verification"
-/project:create-issue "User authentication with JWT tokens"  
-/project:create-issue "User profile management"
+/project:create-issue "user-registration-email-verification"
+/project:create-issue "user-authentication-jwt"  
+/project:create-issue "user-profile-management"
 
 # 3. Implement each issue systematically
 /project:implement-issue-test-first 45  # Authentication (critical)

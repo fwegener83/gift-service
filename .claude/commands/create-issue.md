@@ -7,8 +7,9 @@
 ## WORKFLOW OVERVIEW
 
 ```markdown
-**Feature Request**: $ARGUMENTS
-**Current Phase**: [RESEARCH|PLANNING|ISSUE_CREATION]
+**Issue Name**: $ARGUMENTS
+**Current Phase**: [USER_INPUT|RESEARCH|PLANNING|ISSUE_CREATION]
+**User Input Status**: [Pending|Complete]
 **Research Status**: [Pending|Complete|Approved]
 **Planning Status**: [Pending|Complete|Approved]
 **Issue Status**: [Not Created|Created]
@@ -16,13 +17,46 @@
 
 ---
 
+## Phase 0: USER INPUT COLLECTION
+
+### 📝 Issue Name Confirmation
+**Issue Name**: "$ARGUMENTS"
+
+### 📋 User Input Request
+**CRITICAL**: Before proceeding with any research or analysis, ask the user to provide more details about what they want to implement.
+
+**User Prompt**:
+```
+You want to create an issue for: "$ARGUMENTS"
+
+Could you please describe in more detail what you have in mind? Tell me about:
+- What functionality you want to implement
+- What problem this should solve
+- Any specific requirements or ideas you have
+- How you envision this working
+
+Just share your thoughts and ideas - no need to follow any specific format.
+```
+
+### 🚦 MANDATORY CHECKPOINT 1: User Input Collection
+**STOP**: Wait for user to provide detailed description before proceeding.
+
+**Required User Response**: 
+- Detailed description of the feature/issue requirements
+- Any additional context or specific ideas
+
+**Do NOT proceed to research until user provides this input.**
+
+---
+
 ## Phase 1: RESEARCH & ANALYSIS
 
-### ✅ MANDATORY CHECKPOINT 1: Research Prerequisites
+### ✅ MANDATORY CHECKPOINT 2: Research Prerequisites
 **BEFORE starting research, VERIFY:**
 1. ✅ Working directory is clean (no uncommitted changes)
 2. ✅ Current branch status understood
-3. ✅ Feature request description clear: "$ARGUMENTS"
+3. ✅ Issue name clear: "$ARGUMENTS"
+4. ✅ User has provided detailed description of requirements
 
 ### 📋 Research Tasks (NO IMPLEMENTATION)
 
@@ -54,33 +88,25 @@
    - Check MockMvc patterns for controller testing
    - Understand test naming and organization conventions
 
-#### 2. Requirements Clarification
-**Interactive Requirements Gathering:**
+#### 2. Requirements Analysis
+**User Requirements Analysis:**
+
+Based on the user's detailed description provided in Phase 0, analyze and structure the requirements:
 
 ```markdown
-**Feature Request Analysis**: "$ARGUMENTS"
+**Issue Analysis**: "$ARGUMENTS"
 
-**Questions to Clarify** (Ask user for missing information):
-1. **Scope Definition**:
-   - What specific functionality should be implemented?
-   - Which user stories or use cases are covered?
-   - Are there any constraints or limitations?
+**User Requirements Summary**:
+[Summarize the user's detailed description from Phase 0]
 
-2. **Technical Requirements**:
-   - Should this be a new endpoint or modify existing ones?
-   - What data models are affected?
-   - Are there specific validation rules needed?
-
-3. **Integration Requirements**:
-   - How does this interact with existing features?
-   - Are there API compatibility concerns?
-   - What about database migration needs?
-
-4. **Quality Requirements**:
-   - What testing coverage is expected?
-   - Are there performance considerations?
-   - What documentation needs updating?
+**Derived Technical Requirements**:
+- **Scope Definition**: [Based on user input]
+- **Technical Approach**: [Based on user input and codebase analysis]
+- **Integration Points**: [Based on user input and codebase analysis]
+- **Quality Requirements**: [Based on user input and project standards]
 ```
+
+**Note**: Only ask for additional clarification if the user's Phase 0 input was insufficient or unclear.
 
 ### 📊 Research Documentation Creation
 
@@ -88,6 +114,9 @@ Create comprehensive research findings:
 
 ```markdown
 # Research Analysis: $ARGUMENTS
+
+## User Requirements
+[Detailed summary of user's description from Phase 0]
 
 ## Executive Summary
 - **Feature Scope**: [Clear boundary definition]
@@ -157,7 +186,7 @@ Create comprehensive research findings:
 [Proceed to planning phase / Need additional clarification / Modify scope]
 ```
 
-### 🚦 MANDATORY CHECKPOINT 2: Research Approval
+### 🚦 MANDATORY CHECKPOINT 3: Research Approval
 **STOP**: Present research findings to user and wait for explicit approval.
 
 **Required User Response**: 
@@ -170,7 +199,7 @@ Create comprehensive research findings:
 
 ## Phase 2: DETAILED PLANNING
 
-### ✅ MANDATORY CHECKPOINT 3: Planning Prerequisites
+### ✅ MANDATORY CHECKPOINT 4: Planning Prerequisites
 **VERIFY before starting planning:**
 1. ✅ Research phase completed and user-approved
 2. ✅ All requirements clarified with user  
@@ -324,7 +353,7 @@ As a [user type], I want [functionality] so that [benefit/value].
 - [ ] Performance impact assessed
 ```
 
-### 🚦 MANDATORY CHECKPOINT 4: Planning Approval
+### 🚦 MANDATORY CHECKPOINT 5: Planning Approval
 **STOP**: Present complete planning results to user and wait for explicit approval.
 
 **Required User Response**:
@@ -337,7 +366,7 @@ As a [user type], I want [functionality] so that [benefit/value].
 
 ## Phase 3: GITHUB ISSUE CREATION
 
-### ✅ MANDATORY CHECKPOINT 5: Issue Creation Prerequisites  
+### ✅ MANDATORY CHECKPOINT 6: Issue Creation Prerequisites  
 **VERIFY before creating issue:**
 1. ✅ Research phase completed and user-approved
 2. ✅ Planning phase completed and user-approved  
@@ -389,19 +418,25 @@ EOF
 **Workflow Status**: ✅ CREATE-ISSUE workflow completed successfully
 ```
 
-### 🚦 FINAL CHECKPOINT: Workflow Completion
+### 🚦 FINAL CHECKPOINT 7: Workflow Completion
 **Workflow SUCCESS criteria:**
-1. ✅ Research phase completed with user approval
-2. ✅ Planning phase completed with user approval  
-3. ✅ GitHub issue created with comprehensive details
-4. ✅ Issue ready for implementation phase
-5. ✅ User provided with clear next steps
+1. ✅ User input collected and processed
+2. ✅ Research phase completed with user approval
+3. ✅ Planning phase completed with user approval  
+4. ✅ GitHub issue created with comprehensive details
+5. ✅ Issue ready for implementation phase
+6. ✅ User provided with clear next steps
 
 ---
 
 ## 🔄 ERROR HANDLING & VALIDATION
 
 ### Common Issues and Resolutions
+
+#### User Input Phase Issues
+- **Vague or insufficient user input**: Ask follow-up questions for clarification
+- **Too broad requirements**: Help user narrow down the scope
+- **Conflicting requirements**: Clarify priorities and trade-offs with user
 
 #### Research Phase Issues
 - **Incomplete codebase analysis**: Re-examine with more detail
@@ -421,6 +456,7 @@ EOF
 ### Quality Validation Checklist
 
 **Before Issue Creation:**
+- [ ] User input collected and requirements understood
 - [ ] Research findings comprehensive and user-approved
 - [ ] Planning detailed with clear implementation tasks  
 - [ ] All success criteria specific and verifiable
