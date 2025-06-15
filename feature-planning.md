@@ -18,17 +18,17 @@
 ### 1.3 Database Setup
 - [x] PostgreSQL configuration
 - [x] Database migration setup (Liquibase/Flyway)
-- [ ] Initial schema creation scripts
+- [x] Initial schema creation scripts
 - [x] TestContainers configuration for tests
 
 ## Phase 2: Data Access Layer
 **Goal**: Repository layer with basic CRUD operations
 
 ### 2.1 Repositories
-- [ ] GiftSuggestion repository with Spring Data JPA
-- [ ] ConcreteGift repository
-- [ ] Custom query methods for filtering
-- [ ] Repository integration tests with TestContainers
+- [x] GiftSuggestion repository with Spring Data JPA
+- [x] ConcreteGift repository
+- [x] Custom query methods for filtering
+- [x] Repository integration tests with TestContainers
 
 ## Phase 3: Business Logic Layer
 **Goal**: Service layer with core business operations
