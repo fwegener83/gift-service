@@ -8,7 +8,8 @@
 
 ```markdown
 **Current Feature**: $ARGUMENTS
-**Current Phase**: [EXPLORATION|PLANNING|IMPLEMENTATION|FINALIZATION]
+**Current Phase**: 
+[EXPLORATION|PLANNING|IMPLEMENTATION|FINALIZATION]
 **Current Issue**: #[number] or "None"
 **Branch**: feature/[feature-name]
 **Progress**: [X/Y issues completed]
