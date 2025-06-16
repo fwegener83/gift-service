@@ -1,0 +1,198 @@
+### Gift Service API Test Collection
+### Base URL for local development
+@baseUrl = http://localhost:8080/api/v1
+
+###############################################################################
+# GIFT SUGGESTIONS API
+###############################################################################
+
+### 1. Get all gift suggestions (paginated)
+GET {{baseUrl}}/gift-suggestions?page=0&size=10&sort=name&direction=ASC
+Accept: application/json
+
+### 2. Create a new gift suggestion
+POST {{baseUrl}}/gift-suggestions
+Content-Type: application/json
+
+{
+  "name": "Wireless Gaming Headset",
+  "description": "High-quality wireless headset perfect for gaming enthusiasts with noise cancellation",
+  "minPrice": 50.00,
+  "maxPrice": 150.00,
+  "ageGroup": "YOUNG_ADULT",
+  "gender": "UNISEX",
+  "interest": "GAMING",
+  "occasion": "BIRTHDAY",
+  "relationship": "FRIEND",
+  "personalityType": "COMPETITIVE"
+}
+
+### 3. Get gift suggestion by ID (replace with actual ID from create response)
+@giftSuggestionId = {{$guid}}
+GET {{baseUrl}}/gift-suggestions/{{giftSuggestionId}}
+Accept: application/json
+
+### 4. Update gift suggestion
+PUT {{baseUrl}}/gift-suggestions/{{giftSuggestionId}}
+Content-Type: application/json
+
+{
+  "name": "Premium Wireless Gaming Headset",
+  "description": "Updated description - Premium wireless headset with RGB lighting",
+  "minPrice": 75.00,
+  "maxPrice": 200.00,
+  "ageGroup": "YOUNG_ADULT",
+  "gender": "UNISEX",
+  "interest": "GAMING",
+  "occasion": "BIRTHDAY",
+  "relationship": "FRIEND",
+  "personalityType": "COMPETITIVE"
+}
+
+### 5. Search gift suggestions with advanced criteria
+GET {{baseUrl}}/gift-suggestions/search?ageGroup=ADULT&gender=UNISEX&interest=TECHNOLOGY&maxBudget=200.00&page=0&size=20
+Accept: application/json
+
+### 6. Get gift suggestions by age group
+GET {{baseUrl}}/gift-suggestions/by-age-group/ADULT
+Accept: application/json
+
+### 7. Get gift suggestions by price range
+GET {{baseUrl}}/gift-suggestions/by-price-range?minPrice=20.00&maxPrice=100.00
+Accept: application/json
+
+### 8. Delete gift suggestion
+DELETE {{baseUrl}}/gift-suggestions/{{giftSuggestionId}}
+
+###############################################################################
+# CONCRETE GIFTS API
+###############################################################################
+
+### 9. Get all concrete gifts (paginated)
+GET {{baseUrl}}/concrete-gifts?page=0&size=10&sort=name&direction=ASC
+Accept: application/json
+
+### 10. Create a new concrete gift
+POST {{baseUrl}}/concrete-gifts
+Content-Type: application/json
+
+{
+  "name": "SteelSeries Arctis 7P",
+  "description": "Wireless gaming headset designed for PlayStation with lossless 2.4GHz connection",
+  "exactPrice": 129.99,
+  "vendorName": "Amazon",
+  "productUrl": "https://amazon.com/steelseries-arctis-7p",
+  "productSku": "SS-ARCTIS-7P-BLK",
+  "available": true,
+  "giftSuggestionId": "{{giftSuggestionId}}"
+}
+
+### 11. Get concrete gift by ID (replace with actual ID from create response)
+@concreteGiftId = {{$guid}}
+GET {{baseUrl}}/concrete-gifts/{{concreteGiftId}}
+Accept: application/json
+
+### 12. Update concrete gift
+PUT {{baseUrl}}/concrete-gifts/{{concreteGiftId}}
+Content-Type: application/json
+
+{
+  "name": "SteelSeries Arctis 7P - Updated",
+  "description": "Updated wireless gaming headset with new firmware",
+  "exactPrice": 119.99,
+  "vendorName": "Best Buy",
+  "productUrl": "https://bestbuy.com/steelseries-arctis-7p",
+  "productSku": "SS-ARCTIS-7P-BLK-V2",
+  "available": true,
+  "giftSuggestionId": "{{giftSuggestionId}}"
+}
+
+### 13. Get concrete gifts by vendor
+GET {{baseUrl}}/concrete-gifts/by-vendor/Amazon
+Accept: application/json
+
+### 14. Get concrete gifts by availability
+GET {{baseUrl}}/concrete-gifts/by-availability?available=true
+Accept: application/json
+
+### 15. Get concrete gifts by price range
+GET {{baseUrl}}/concrete-gifts/by-price-range?minPrice=50.00&maxPrice=200.00
+Accept: application/json
+
+### 16. Search concrete gifts with advanced criteria
+GET {{baseUrl}}/concrete-gifts/search?vendorName=Amazon&available=true&minPrice=50.00&maxPrice=300.00&page=0&size=20
+Accept: application/json
+
+### 17. Delete concrete gift
+DELETE {{baseUrl}}/concrete-gifts/{{concreteGiftId}}
+
+###############################################################################
+# NESTED ROUTES - Gift Suggestion Concrete Gifts
+###############################################################################
+
+### 18. Get concrete gifts for specific gift suggestion
+GET {{baseUrl}}/gift-suggestions/{{giftSuggestionId}}/concrete-gifts?page=0&size=10
+Accept: application/json
+
+### 19. Count concrete gifts for specific gift suggestion
+GET {{baseUrl}}/gift-suggestions/{{giftSuggestionId}}/concrete-gifts/count
+Accept: application/json
+
+###############################################################################
+# ERROR SCENARIOS - Testing exception handling
+###############################################################################
+
+### 20. Test 404 - Non-existent gift suggestion
+GET {{baseUrl}}/gift-suggestions/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### 21. Test 400 - Invalid gift suggestion creation (missing required fields)
+POST {{baseUrl}}/gift-suggestions
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "",
+  "minPrice": -10.00,
+  "maxPrice": 0.00
+}
+
+### 22. Test 404 - Non-existent concrete gift
+GET {{baseUrl}}/concrete-gifts/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### 23. Test 400 - Invalid concrete gift creation (invalid gift suggestion ID)
+POST {{baseUrl}}/concrete-gifts
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "Test description",
+  "exactPrice": 99.99,
+  "vendorName": "Test Vendor",
+  "available": true,
+  "giftSuggestionId": "00000000-0000-0000-0000-000000000000"
+}
+
+###############################################################################
+# HEALTH CHECK & INFO
+###############################################################################
+
+### 24. Application health check
+GET http://localhost:8080/actuator/health
+Accept: application/json
+
+### 25. Application info
+GET http://localhost:8080/actuator/info
+Accept: application/json
+
+###############################################################################
+# OPENAPI DOCUMENTATION
+###############################################################################
+
+### 26. OpenAPI specification
+GET http://localhost:8080/v3/api-docs
+Accept: application/json
+
+### 27. Swagger UI (open in browser)
+GET http://localhost:8080/swagger-ui/index.html
