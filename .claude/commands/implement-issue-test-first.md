@@ -23,10 +23,10 @@
 1. ✅ Issue ID provided as argument: $ARGUMENTS
 2. ✅ GitHub CLI authenticated (`gh auth status`)
 3. ✅ Working directory clean (no uncommitted changes)
-4. ✅ On correct feature branch
+4. ✅ Create feature branch for this issue
 5. ✅ Understanding of TDD principles (Red-Green-Refactor)
 
-**AUTOMATION**: Validate prerequisites:
+**AUTOMATION**: Validate prerequisites and create feature branch:
 ```bash
 # Check GitHub CLI authentication
 gh auth status
@@ -34,20 +34,32 @@ gh auth status
 # Check current git status  
 git status --porcelain
 
-# Check current branch
+# Ensure we're on main branch and up to date
+git checkout main
+git pull origin main
+
+# Create feature branch for this issue
+git checkout -b feature/issue-$ARGUMENTS-$(gh issue view $ARGUMENTS --json title --jq '.title' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g' | head -c 50)
+
+# Verify branch creation
 git branch --show-current
 ```
 
 ### 📋 Issue Information Retrieval
 
-**Load GitHub Issue Details:**
+**Load GitHub Issue Details (using GitHub CLI exclusively):**
 ```bash
-# Get complete issue information
+# Get complete issue information using gh CLI
 gh issue view $ARGUMENTS --json number,title,body,labels,assignees,state
 
 # Parse issue content for test design guidance
 gh issue view $ARGUMENTS --json body --jq '.body'
+
+# Mark issue as in progress using gh CLI
+gh issue edit $ARGUMENTS --add-label "in-progress"
 ```
+
+**IMPORTANT**: Always prefer `gh` CLI commands over manual GitHub operations or API calls.
 
 ### 📊 TDD-Specific Issue Analysis
 
@@ -423,12 +435,14 @@ mvn test -Dtest="*IT"
 ```
 
 **Green Phase Checklist:**
-- [ ] 🟢 ALL tests passing (GREEN phase achieved)
+- [ ] 🟢 ALL tests passing (`mvn clean test` successful - GREEN phase achieved)
 - [ ] ✅ Implementation complete for all success criteria
 - [ ] ✅ Code quality standards met
 - [ ] ✅ No existing tests modified inappropriately
 - [ ] ✅ Implementation follows project patterns
 - [ ] ✅ Ready for REFACTOR phase (if needed)
+
+**CRITICAL**: NEVER proceed to REFACTOR phase unless `mvn clean test` passes completely.
 
 ### 🚦 MANDATORY CHECKPOINT 8: Green Phase Completion
 **STOP**: Only proceed if ALL tests are passing (GREEN phase complete).
@@ -618,11 +632,33 @@ gh issue edit $ARGUMENTS --remove-label "in-progress" --add-label "completed,tdd
 ### 🚦 FINAL CHECKPOINT: TDD Implementation Completion
 **TDD Workflow SUCCESS criteria:**
 1. ✅ RED phase: Tests written first and failed appropriately
-2. ✅ GREEN phase: Implementation makes all tests pass
+2. ✅ GREEN phase: Implementation makes all tests pass (`mvn clean test` successful)
 3. ✅ REFACTOR phase: Code quality optimized
 4. ✅ All success criteria verified through tests
 5. ✅ Implementation committed with TDD documentation
 6. ✅ GitHub issue closed with TDD verification report
+
+### 🎯 PROACTIVE NEXT STEPS SUGGESTION
+**After successful TDD implementation completion, ALWAYS suggest:**
+
+```markdown
+✅ **TDD Implementation Successfully Completed!**
+
+**TDD Status Summary:**
+- RED phase: All tests written first and failed appropriately
+- GREEN phase: Implementation developed to make tests pass
+- REFACTOR phase: Code quality optimized while maintaining test success
+- All tests successful (`mvn clean test` passed)
+- Code committed and pushed to feature branch
+
+**🚀 SUGGESTED NEXT STEPS:**
+Would you like me to:
+1. **Create a Pull Request** to merge this TDD implementation into main branch?
+2. **Close the GitHub Issue** with TDD verification report?
+3. **Run additional integration tests** to ensure no regressions?
+
+Please let me know how you'd like to proceed with the completed TDD implementation.
+```
 
 ---
 
